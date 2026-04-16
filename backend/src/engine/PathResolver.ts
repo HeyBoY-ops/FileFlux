@@ -8,6 +8,7 @@ import { WildcardResolver } from './WildcardResolver';
 export class PathResolver {
     private wildcardResolver: WildcardResolver;
 
+    
     // Dependency Injection: Pass the wildcard resolver in via the constructor
     constructor(wildcardResolver: WildcardResolver) {
         this.wildcardResolver = wildcardResolver;
