@@ -73,7 +73,6 @@ export class FileSystem {
         return (targetNode as DirectoryNode).getChildren();
     }
 
-    // Getters for the UI/Shell Tier
     public getCwd(): DirectoryNode {
         return this.cwd;
     }

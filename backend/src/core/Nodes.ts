@@ -17,7 +17,6 @@ export abstract class FileSystemNode {
         return this.name;
     }
 
-    // Recursively traces back to root to build the full path
     public getPath(): string {
         if (!this.parent) return this.name === '/' ? '/' : `/${this.name}`;
         const parentPath = this.parent.getPath();
@@ -32,7 +31,6 @@ export abstract class FileSystemNode {
         this.parent = parent;
     }
 
-    // Forces subclasses to identify their type
     abstract isDirectory(): boolean;
 }
 
@@ -67,7 +65,6 @@ export class FileNode extends FileSystemNode {
  * Represents a directory. It can contain both Files and other Directories.
  */
 export class DirectoryNode extends FileSystemNode {
-    // Using a Map for O(1) fast lookups by name
     private children: Map<string, FileSystemNode> = new Map();
 
     public isDirectory(): boolean {
