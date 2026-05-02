@@ -72,6 +72,9 @@ export class DirectoryNode extends FileSystemNode {
     }
 
     public addChild(node: FileSystemNode): void {
+        if (this.hasChild(node.getName())) {
+            throw new Error(`File or directory '${node.getName()}' already exists.`);
+        }
         this.children.set(node.getName(), node);
         node.setParent(this);
     }

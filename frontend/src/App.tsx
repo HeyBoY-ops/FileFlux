@@ -1,0 +1,155 @@
+import { useEffect, useRef } from 'react';
+import { Terminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
+import 'xterm/css/xterm.css';
+
+/**
+ * FileFlux: Professional Virtual File System Interface
+ * Built by Mohan Kumar C R
+ */
+const FileFluxTerminal = () => {
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const xtermRef = useRef<Terminal | null>(null);
+  const inputBuffer = useRef('');
+
+  useEffect(() => {
+    if (!terminalRef.current) return;
+
+    // 1. Terminal Configuration: Industrial Minimalist
+    const term = new Terminal({
+      cursorBlink: true,
+      cursorStyle: 'block',
+      fontFamily: '"Fira Code", "JetBrains Mono", monospace',
+      fontSize: 18,
+      theme: {
+        background: '#000000', // Pure Black
+        foreground: '#ffffff', // High-contrast White
+        cursor: '#3fb950',     // Classic Terminal Green
+      },
+    });
+
+    const fitAddon = new FitAddon();
+    term.loadAddon(fitAddon);
+    term.open(terminalRef.current);
+    fitAddon.fit();
+
+    xtermRef.current = term;
+
+    const PROMPT = '\x1b[1;32mguest@FileFlux:/$ \x1b[37m';
+    const PROMPT_LENGTH = 18; // Length of "guest@FileFlux:/$ "
+
+    term.write(PROMPT);
+
+    // 2. Input Handling with Line Guard Logic
+    term.onData(async (data) => {
+      const code = data.charCodeAt(0);
+      const cursorX = term.buffer.active.cursorX;
+
+      if (code === 13) { // Enter Key
+        const command = inputBuffer.current;
+        term.write('\r\n');
+
+        if (command.trim()) {
+          await executeCommand(command, term);
+        } else {
+          term.write(PROMPT);
+        }
+        inputBuffer.current = '';
+
+      } else if (code === 127) { // Backspace
+        // GUARD: Only allow backspace if cursor is ahead of the prompt
+        if (inputBuffer.current.length > 0 && cursorX > PROMPT_LENGTH) {
+          inputBuffer.current = inputBuffer.current.slice(0, -1);
+          term.write('\b \b');
+        }
+
+      } else if (code === 27) { // Potential Arrow Keys/Control Codes
+        // Ignore for now to prevent users from navigating into history
+        return;
+
+      } else if (code >= 32) { // Standard printable characters
+        inputBuffer.current += data;
+        term.write(data);
+      }
+    });
+
+    const handleResize = () => fitAddon.fit();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      term.dispose();
+    };
+  }, []);
+
+  const executeCommand = async (command: string, term: Terminal) => {
+    try {
+      const response = await fetch('http://localhost:5001/api/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command })
+      });
+
+      const data = await response.json();
+      if (data.output) {
+        term.write(data.output + '\r\n');
+      }
+
+      // Dynamic Path Update from Engine
+      term.write(`\x1b[1;32mguest@FileFlux:${data.path}$ \x1b[37m`);
+    } catch (err) {
+      term.write('\x1b[31mError: Connection to FileFlux Engine lost.\x1b[37m\r\n');
+      term.write('\x1b[1;32mguest@FileFlux:/$ \x1b[37m');
+    }
+  };
+
+  return (
+    <div style={{
+      backgroundColor: '#000000',
+      minHeight: '100vh',
+      width: '100vw',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '40px', // Proper spacing from edges
+      boxSizing: 'border-box',
+      textAlign: 'left'
+    }}>
+
+      {/* Header Section */}
+      <header style={{
+        marginBottom: '30px',
+        borderBottom: '1px solid #222',
+        paddingBottom: '10px',
+        width: '100%',
+        textAlign: 'center'
+      }}>
+        <h1 style={{
+          margin: 0,
+          fontSize: '48px',
+          color: '#58a6ff',
+          fontWeight: 500
+        }}>
+          FileFlux
+        </h1>
+        <br />
+        <p style={{
+          margin: '5px 0 0 0',
+          color: '#666',
+          fontSize: '32px'
+        }}>
+          Virtual File System Engine
+        </p>
+      </header>
+
+      {/* Terminal Main Area */}
+      <main style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+        <div
+          ref={terminalRef}
+          style={{ width: '100%', maxWidth: '1200px' }}
+        />
+      </main>
+    </div>
+  );
+};
+
+export default FileFluxTerminal;

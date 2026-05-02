@@ -1,89 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FileFlux — In-Memory Filesystem</title>
-  <meta name="description" content="FileFlux: An interactive in-memory Unix filesystem emulator. Supports mkdir, cd, ls, pwd and wildcard resolution." />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-  <div class="layout">
-
-    <!-- Sidebar: Tree View -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <span class="logo">FileFlux</span>
-        <span class="subtitle">in-memory filesystem</span>
-      </div>
-      <div class="tree-label">Directory Tree</div>
-      <div id="tree-root" class="tree"></div>
-    </aside>
-
-    <!-- Main: Terminal -->
-    <main class="main">
-      <div class="terminal-bar">
-        <span class="dot red"></span>
-        <span class="dot yellow"></span>
-        <span class="dot green"></span>
-        <span class="terminal-title">FileFlux Terminal</span>
-      </div>
-
-      <div class="terminal-body" id="terminal-body">
-        <div class="output-line info">Welcome to <strong>FileFlux</strong> — an in-memory Unix filesystem emulator.</div>
-        <div class="output-line info">Supported commands: <code>mkdir &lt;name&gt;</code>, <code>cd &lt;path&gt;</code>, <code>ls [path]</code>, <code>pwd</code>, <code>clear</code>, <code>help</code></div>
-        <div class="output-line info">Wildcard: <code>cd *</code> navigates to the lexicographically smallest subdirectory.</div>
-        <div class="output-line separator"></div>
-      </div>
-
-      <div class="terminal-input-row">
-        <span class="prompt" id="prompt-label">/ $</span>
-        <input
-          id="cmd-input"
-          class="cmd-input"
-          type="text"
-          autocomplete="off"
-          autocorrect="off"
-          autocapitalize="off"
-          spellcheck="false"
-          autofocus
-          placeholder="type a command..."
-        />
-      </div>
-    </main>
-
-    <!-- Info Panel -->
-    <aside class="info-panel">
-      <div class="info-header">Current State</div>
-      <div class="info-row">
-        <span class="info-label">CWD</span>
-        <span class="info-value" id="info-cwd">/</span>
-      </div>
-      <div class="info-divider"></div>
-      <div class="info-header">Command Reference</div>
-      <div class="cmd-ref">
-        <div class="cmd-ref-item"><code>mkdir &lt;name&gt;</code><span>Create a directory in cwd</span></div>
-        <div class="cmd-ref-item"><code>cd &lt;path&gt;</code><span>Change directory</span></div>
-        <div class="cmd-ref-item"><code>cd ..</code><span>Go up one level</span></div>
-        <div class="cmd-ref-item"><code>cd /</code><span>Go to root</span></div>
-        <div class="cmd-ref-item"><code>cd *</code><span>Go to lex-smallest subdir</span></div>
-        <div class="cmd-ref-item"><code>ls</code><span>List current directory</span></div>
-        <div class="cmd-ref-item"><code>ls &lt;path&gt;</code><span>List given path</span></div>
-        <div class="cmd-ref-item"><code>pwd</code><span>Print working directory</span></div>
-        <div class="cmd-ref-item"><code>clear</code><span>Clear terminal output</span></div>
-        <div class="cmd-ref-item"><code>help</code><span>Show this reference</span></div>
-      </div>
-      <div class="info-divider"></div>
-      <div class="info-header">About Wildcard</div>
-      <div class="info-note">
-        <code>cd *</code> navigates to the <strong>lexicographically smallest</strong> subdirectory in the current directory. If no subdirectories exist, it stays in the current directory.
-      </div>
-    </aside>
-
-  </div>
-
-  <script src="fs.js"></script>
-  <script src="app.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

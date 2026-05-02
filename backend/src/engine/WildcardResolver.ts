@@ -5,10 +5,10 @@ import { DirectoryNode } from '../core/Nodes';
  * Responsibility: Find the lexicographically smallest directory.
  */
 export class WildcardResolver {
-    
+
     public resolve(dir: DirectoryNode, pattern: string): DirectoryNode | null {
         //only support the global '*' pattern
-        if (pattern !== '*') return null; 
+        if (pattern !== '*') return null;
 
         const children = dir.getChildren();
 
@@ -21,7 +21,7 @@ export class WildcardResolver {
         if (dirs.length === 0) return null;
 
         const sortedDirs = [...dirs].sort((a, b) => a.getName().localeCompare(b.getName()));
-        
-        return sortedDirs[0]; 
+
+        return sortedDirs[0] ?? null;
     }
 }
