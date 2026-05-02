@@ -84,7 +84,10 @@ const FileFluxTerminal = () => {
 
   const executeCommand = async (command: string, term: Terminal) => {
     try {
-      const response = await fetch('http://localhost:5001/api/execute', {
+      // This line dynamically picks the right URL based on your environment
+      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
+      const response = await fetch(`${API_BASE_URL}/api/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ command })
@@ -96,7 +99,7 @@ const FileFluxTerminal = () => {
       }
 
       // Dynamic Path Update from Engine
-      term.write(`\x1b[1;32mguest@FileFlux:${data.path}$ \x1b[37m`);
+      term.write(`\x1b[1;32mguest@FileFlux:${data.path || '/'}$ \x1b[37m`);
     } catch (err) {
       term.write('\x1b[31mError: Connection to FileFlux Engine lost.\x1b[37m\r\n');
       term.write('\x1b[1;32mguest@FileFlux:/$ \x1b[37m');
