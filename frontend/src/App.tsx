@@ -81,7 +81,7 @@ const FileFluxTerminal = () => {
       term.dispose();
     };
   }, []);
-  const sessionId = useRef(Math.random().toString(36).substring(2, 15));
+
   const executeCommand = async (command: string, term: Terminal) => {
     try {
       // This line dynamically picks the right URL based on your environment
@@ -90,11 +90,7 @@ const FileFluxTerminal = () => {
       const response = await fetch(`${API_BASE_URL}/api/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          command: command,
-          sessionId: sessionId.current
-
-        })
+        body: JSON.stringify({ command })
       });
 
       const data = await response.json();
@@ -148,12 +144,47 @@ const FileFluxTerminal = () => {
         </p>
       </header>
 
-      {/* Terminal Main Area */}
-      <main style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
-        <div
-          ref={terminalRef}
-          style={{ width: '100%', maxWidth: '1200px' }}
-        />
+      {/* Main Content Area */}
+      <main style={{ width: '100%', display: 'flex', flex: 1, gap: '30px', minHeight: 0 }}>
+        
+        {/* Terminal Section (75%) */}
+        <div style={{ flex: 3, minWidth: 0 }}>
+          <div
+            ref={terminalRef}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
+
+        {/* Sidebar Section (25%) */}
+        <div style={{ 
+          flex: 1, 
+          borderLeft: '1px solid #222', 
+          paddingLeft: '30px', 
+          color: '#888',
+          overflowY: 'auto' 
+        }}>
+          <h3 style={{ 
+            marginTop: 0, 
+            marginBottom: '20px', 
+            fontSize: '16px', 
+            color: '#666', 
+            textTransform: 'uppercase', 
+            letterSpacing: '1px' 
+          }}>
+            Available Commands
+          </h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, lineHeight: '2.5', fontSize: '15px' }}>
+            <li><strong style={{ color: '#3fb950' }}>ls</strong> - List files and folders</li>
+            <li><strong style={{ color: '#3fb950' }}>cd</strong> - Change directory</li>
+            <li><strong style={{ color: '#3fb950' }}>mkdir</strong> - Create a folder</li>
+            <li><strong style={{ color: '#3fb950' }}>touch</strong> - Create a file</li>
+            <li><strong style={{ color: '#3fb950' }}>cat</strong> - Read file content</li>
+            <li><strong style={{ color: '#3fb950' }}>echo</strong> - Print text to console</li>
+            <li><strong style={{ color: '#3fb950' }}>pwd</strong> - Print working directory</li>
+            <li><strong style={{ color: '#3fb950' }}>rm</strong> - Remove a file or folder</li>
+            <li><strong style={{ color: '#3fb950' }}>clear</strong> - Wipe the cloud storage</li>
+          </ul>
+        </div>
       </main>
     </div>
   );

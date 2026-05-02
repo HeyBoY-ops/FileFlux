@@ -39,7 +39,7 @@ export class FileSystem {
         }
 
         const targetNode = this.pathResolver.resolve(this.cwd, path, this.root);
-        
+
         if (!targetNode) {
             throw new Error(`cd: ${path}: No such file or directory`);
         }
@@ -56,24 +56,54 @@ export class FileSystem {
     }
 
     public ls(path?: string): FileSystemNode[] {
-        const targetNode = path 
-            ? this.pathResolver.resolve(this.cwd, path, this.root) 
+        const targetNode = path
+            ? this.pathResolver.resolve(this.cwd, path, this.root)
             : this.cwd;
-            
+
         if (!targetNode) {
             throw new Error(`ls: cannot access '${path}': No such file or directory`);
         }
-        
+
         // If they ls a file, just return the file
         if (!targetNode.isDirectory()) {
             return [targetNode];
         }
-        
+
         // Return contents of the directory
         return (targetNode as DirectoryNode).getChildren();
     }
 
     public getCwd(): DirectoryNode {
         return this.cwd;
+    }
+    public clear(): void {
+        this.root = new DirectoryNode("/");
+        this.cwd = this.root;
+    }
+
+    public remove(name: string): string {
+        // 1. Prevent users from deleting the current directory or parent pointers
+        if (name === '.' || name === '..') {
+            return `rm: cannot remove '${name}': Invalid argument`;
+        }
+
+        const currentDir = this.getCwd() as DirectoryNode;
+
+        // 2. Safety check: Ensure the target isn't the directory we are currently standing in
+        // This prevents "orphaning" the session
+        const targetNode = currentDir.getChild(name);
+        if (targetNode === this.cwd) {
+            return `rm: cannot remove '${name}': It is the current working directory`;
+        }
+
+        // 3. THE FIX: Use the existing removeChild method to delete from the Map
+        const wasDeleted = currentDir.removeChild(name);
+
+        if (!wasDeleted) {
+            return `rm: cannot remove '${name}': No such file or directory`;
+        }
+
+        // Return empty string on success, just like a real Linux terminal
+        return "";
     }
 }

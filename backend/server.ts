@@ -6,70 +6,40 @@ import { CommandProcessor } from './src/shell/CommandProcessor';
 import { TouchCommand } from './src/shell/commands/TouchCommand';
 import { CatCommand } from './src/shell/commands/CatCommand';
 import { EchoCommand } from './src/shell/commands/EchoCommand';
+import { ClearCommand } from './src/shell/commands/ClearCommand';
+import { RmCommand } from './src/shell/commands/RunCommand';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Middleware
-app.use(cors());
+app.use(cors()); // Allows your React app to talk to this server
 app.use(express.json());
 
-// 1. Define the structure for a user's isolated session
-interface SessionData {
-    fs: FileSystem;
-    processor: CommandProcessor;
-}
+// 1. Initialize the Virtual File System in the server's RAM
+const fs = new FileSystem();
+const processor = new CommandProcessor(fs);
+processor.register('touch', new TouchCommand());
+processor.register('cat', new CatCommand());
+processor.register('echo', new EchoCommand());
+processor.register('clear', new ClearCommand());
+processor.register('rm', new RmCommand());
 
-// 2. The Master Brain: Holds all active playgrounds in RAM
-const activeSessions: Record<string, SessionData> = {};
-
-// Health Check Route for Render
-app.get('/', (req: Request, res: Response) => {
-    res.status(200).send('FileFlux Engine is Online and Ready.');
-});
-
-// 3. The Execution Endpoint
+// 2. The execution endpoint
 app.post('/api/execute', (req: Request, res: Response) => {
-    // Extract both the command and the unique ID sent from the React frontend
-    const { command, sessionId } = req.body;
+    const { command } = req.body;
 
     if (!command) {
         return res.status(400).json({ error: 'No command provided' });
     }
 
-    // Security check: Ensure frontend is passing the ID
-    if (!sessionId) {
-        return res.status(400).json({ error: 'No sessionId provided. Connection rejected.' });
-    }
+    // Process the command using your existing logic
+    const output = processor.process(command);
 
-    // 4. If this is a brand new user, build their isolated engine
-    if (!activeSessions[sessionId]) {
-        const userFs = new FileSystem();
-        const userProcessor = new CommandProcessor(userFs);
-
-        userProcessor.register('touch', new TouchCommand());
-        userProcessor.register('cat', new CatCommand());
-        userProcessor.register('echo', new EchoCommand());
-
-        // Save it to the master dictionary
-        activeSessions[sessionId] = {
-            fs: userFs,
-            processor: userProcessor
-        };
-
-        console.log(`[+] New Session Created: ${sessionId}`);
-    }
-
-    // 5. Grab this specific user's engine components
-    const userSession = activeSessions[sessionId];
-
-    // Process the command safely isolated from everyone else
-    const output = userSession.processor.process(command);
-
-    // Return the result and the user's specific path
+    // Return the result and the new path
     res.json({
         output: output,
-        path: userSession.fs.pwd()
+        path: fs.pwd()
     });
 });
 
