@@ -85,9 +85,7 @@ const FileFluxTerminal = () => {
   const executeCommand = async (command: string, term: Terminal) => {
     try {
       // This line dynamically picks the right URL based on your environment
-      const API_BASE_URL = import.meta.env.PROD
-        ? 'https://fileflux-rob1.onrender.com'
-        : 'http://localhost:5001';
+      const API_BASE_URL = 'https://fileflux-rob1.onrender.com'
 
       const response = await fetch(`${API_BASE_URL}/api/execute`, {
         method: 'POST',
