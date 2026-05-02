@@ -146,7 +146,7 @@ const FileFluxTerminal = () => {
 
       {/* Main Content Area */}
       <main style={{ width: '100%', display: 'flex', flex: 1, gap: '30px', minHeight: 0 }}>
-        
+
         {/* Terminal Section (75%) */}
         <div style={{ flex: 3, minWidth: 0 }}>
           <div
@@ -156,20 +156,20 @@ const FileFluxTerminal = () => {
         </div>
 
         {/* Sidebar Section (25%) */}
-        <div style={{ 
-          flex: 1, 
-          borderLeft: '1px solid #222', 
-          paddingLeft: '30px', 
+        <div style={{
+          flex: 1,
+          borderLeft: '1px solid #222',
+          paddingLeft: '30px',
           color: '#888',
-          overflowY: 'auto' 
+          overflowY: 'auto'
         }}>
-          <h3 style={{ 
-            marginTop: 0, 
-            marginBottom: '20px', 
-            fontSize: '16px', 
-            color: '#666', 
-            textTransform: 'uppercase', 
-            letterSpacing: '1px' 
+          <h3 style={{
+            marginTop: 0,
+            marginBottom: '20px',
+            fontSize: '16px',
+            color: '#666',
+            textTransform: 'uppercase',
+            letterSpacing: '1px'
           }}>
             Available Commands
           </h3>
