@@ -81,7 +81,7 @@ const FileFluxTerminal = () => {
       term.dispose();
     };
   }, []);
-
+  const sessionId = useRef(Math.random().toString(36).substring(2, 15));
   const executeCommand = async (command: string, term: Terminal) => {
     try {
       // This line dynamically picks the right URL based on your environment
@@ -90,7 +90,11 @@ const FileFluxTerminal = () => {
       const response = await fetch(`${API_BASE_URL}/api/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ command })
+        body: JSON.stringify({
+          command: command,
+          sessionId: sessionId.current
+
+        })
       });
 
       const data = await response.json();
