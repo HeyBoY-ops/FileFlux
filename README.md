@@ -5,6 +5,8 @@ FileFlux is an advanced, web-based Command Line Interface (CLI) simulation engin
 
 Unlike traditional isolated terminal emulators, FileFlux features a **Singleton Global State architecture**. This allows for real-time, multi-user collaboration within a shared virtual file system in the cloud. It natively supports dynamic path resolution, relative directory traversal (`.`, `..`), deterministic wildcard expansion (`*`), and real-time state synchronization.
 
+**Live Link:** [fileflux-swart.vercel.app](https://fileflux-swart.vercel.app)
+
 ---
 
 ## 🛠️ Tech Stack
