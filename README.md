@@ -38,7 +38,7 @@ To set up the FileFlux engine locally on your machine, ensure you have **Node.js
 **1. Clone the repository:**
 
 ```bash
-git clone [https://github.com/HeyBoY-ops/FileFlux.git](https://github.com/HeyBoY-ops/FileFlux.git)
+git clone https://github.com/HeyBoY-ops/FileFlux.git
 cd FileFlux
 ```
 
