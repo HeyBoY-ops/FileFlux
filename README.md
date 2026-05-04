@@ -7,6 +7,8 @@ Unlike traditional isolated terminal emulators, FileFlux features a **Singleton 
 
 **Live Link:** [fileflux-swart.vercel.app](https://fileflux-swart.vercel.app)
 
+**Project Report:** [https://drive.google.com/file/d/1Rl929ZA6gMbFbWloluW3zH4Wsdd2x4zv/view?usp=drive_link](https://drive.google.com/file/d/1Rl929ZA6gMbFbWloluW3zH4Wsdd2x4zv/view?usp=drive_link)
+
 ---
 
 ## 🛠️ Tech Stack
