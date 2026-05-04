@@ -9,7 +9,7 @@ Unlike traditional isolated terminal emulators, FileFlux features a **Singleton 
 
 **Project Report:** [https://drive.google.com/file/d/1Rl929ZA6gMbFbWloluW3zH4Wsdd2x4zv/view?usp=drive_link](https://drive.google.com/file/d/1Rl929ZA6gMbFbWloluW3zH4Wsdd2x4zv/view?usp=drive_link)
 
----
+----
 
 ## 🛠️ Tech Stack
 
